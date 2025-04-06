@@ -1,13 +1,48 @@
 # InnoNotebooks
-A set of notebooks to investigate the SDG approach
+A set of notebooks to investigate the SDG approach on the TIP platform:
+- exzract_sdg.ipynb: the list of SDGs wiht some cleanup. It is asave as a pickle dataframe
+- patent_extract_analyis: this notebook has the purpose to analyse the xtraction of interesting data from the patents, especially the background and the technical field. Different algorithms are tested and the result can vizualised and checked.
+- Search.ipnyb: this is juste an interface with the OVH server and the embedding and search code runnning on it.Basically, ssh commands.
+- Process_results: the data are loaded from the OVH server and vizualized and compared. The purpose is both to create a test set for the classification algorithm and to test it.
 
-
-# Updates
-- extract_prompts now has all sdgs included.
--  patent_extract has now sql queries to load random texts, texts in each IPC class, texts in 10 groups of dates between the first and the last publication: still in test
-- automatic transfer of the result to the ovh server for embedding and search
-- patent number added, patent date added,
-- extraction of limited number of characters directly in sql request to avoid high transfer load
+# installation
+These notebooks are conceived to run on the TIP platform and to interface with the OVH server with elasticsearch.
+Several steps are required for the installation:
+- cloning the repository in TIP:
+  git clone https://github.com/alkemata/InnoNotebooks
+- creating a SSH key for accessing the OVH server without password:
+  Open a terminal: This is your command-line interface.
+Use the ssh-keygen command:
+The basic command is: ssh-keygen
+For stronger security, consider using ED25519 keys: ssh-keygen -t ed25519
+You can also specify the bit length for RSA keys (e.g., 4096 bits): ssh-keygen -t rsa -b 4096
+Follow the prompts:
+You'll be asked where to save the keys. The default location (~/.ssh/id_rsa or ~/.ssh/id_ed25519) is usually fine.
+You'll be prompted to enter a passphrase. While optional, a passphrase adds an extra layer of security. If someone gains access to your private key, they'll still need the passphrase.
+After completing the prompts, you'll have two files:
+id_rsa or id_ed25519 (or whatever name you chose): This is your private key. Keep this file secure!
+id_rsa.pub or id_ed25519.pub: This is your public key.
+2. Copying the Public Key to the Remote Server:
+      Using ssh-copy-id (recommended):
+    This is the easiest way to copy your public key.
+    The command is: ssh-copy-id user@remote_host
+    Replace user with your username on the remote server.
+    Replace remote_host with the IP address or hostname of the remote server.
+    You'll be prompted for your password on the remote server once.
+    This command will append the contents of your public key file to the remote servers ~/.ssh/authorized_keys file.
+    Manual copying:
+    If ssh-copy-id is not available, you can manually copy the public key.
+    Use cat ~/.ssh/id_rsa.pub (or the appropriate public key file) to display the contents of your public key.
+    Copy the output.
+    SSH into the remote server: ssh user@remote_host
+    Create the ~/.ssh directory if it doesn't exist: mkdir -p ~/.ssh
+    Create or append to the ~/.ssh/authorized_keys file: echo "your_public_key" >> ~/.ssh/authorized_keys
+    Replace your_public_key with the copied public key.
+    It is very important that the ~/.ssh/authorized_keys file has the correct permissions. The permissions should be set to 600. So after the file has been created, run the command: chmod 600 ~/.ssh/authorized_keys
+- creatng a ".env" file with the following parameters:
+server= the IP of the OVH server
+username= the username on the OVH server
+key= the path to the private SSH key.
 
 
 # TODO
